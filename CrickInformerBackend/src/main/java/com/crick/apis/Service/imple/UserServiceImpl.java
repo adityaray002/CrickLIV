@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,5 +58,56 @@ public class UserServiceImpl implements UserService {
             return userOpt.get().getBookmark();
         }
         return new ArrayList<>();
+    }
+
+//    @Override
+//    public String deleteBookmarkById(FeaturedMatch featuredMatch,String email) {
+//        User user = userRepo.findByEmail(email).orElse(null);
+//        if(user!=null){
+//           List<FeaturedMatch>  bookmarkedList = getAllBookmark(email);
+//           for(FeaturedMatch i:bookmarkedList){
+//               if(i.equals(featuredMatch)){
+//                   bookmarkedList.remove(i);
+//                   user.setBookmark(bookmarkedList);
+//                   userRepo.save(user);
+//                   break;
+//               }
+//           }
+//
+//        }
+//        return "success";
+//    }
+
+    @Override
+    public String deleteBookmarkById(FeaturedMatch featuredMatch, String email) {
+        User user = userRepo.findByEmail(email).orElse(null);
+        if (user != null) {
+            List<FeaturedMatch> bookmarkedList = user.getBookmark();
+            Iterator<FeaturedMatch> iterator = bookmarkedList.iterator();
+            while (iterator.hasNext()) {
+                FeaturedMatch match = iterator.next();
+                if (match.equals(featuredMatch)) {
+                    iterator.remove();
+                    user.setBookmark(bookmarkedList);
+                    userRepo.save(user);
+                    return "success";
+                }
+            }
+        }
+        return "failure";
+    }
+
+    @Override
+    public String clearBookmark(String email) {
+        User user = userRepo.findByEmail(email).orElse(null);
+        if(user!=null){
+            List<FeaturedMatch> list = user.getBookmark();
+            list.clear();
+            user.setBookmark(list);
+
+            userRepo.save(user);
+            return "Success";
+        }
+        return "failure";
     }
 }

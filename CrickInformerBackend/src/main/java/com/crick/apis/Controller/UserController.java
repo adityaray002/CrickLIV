@@ -35,5 +35,18 @@ public class UserController {
         return userService.getAllBookmark(email);
     }
 
+    @PostMapping("/deleteBookmarkById")
+    public String deleteBookmarkById(@RequestBody FeaturedMatch featuredMatch, Principal principal) {
+        String email = getLoggedInUser(principal);
+        return userService.deleteBookmarkById(featuredMatch,email);
+    }
+
+    @PostMapping("/clear-bookmarks")
+    public String clearBookmark(Principal principal) {
+        String email = getLoggedInUser(principal);
+        return userService.clearBookmark(email);
+    }
+
+
 
 }

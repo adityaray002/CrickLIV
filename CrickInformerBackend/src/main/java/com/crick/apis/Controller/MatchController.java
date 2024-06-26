@@ -17,6 +17,7 @@ public class MatchController {
     @Autowired
     private MatchService matchService;
 
+
     @GetMapping("/live")
     public ResponseEntity<List<Match>> getLiveMatches(){
         return new ResponseEntity<>(this.matchService.getLiveMatches(), HttpStatus.OK);
@@ -31,6 +32,9 @@ public class MatchController {
     public ResponseEntity<?> getPointTable(){
         return new ResponseEntity<>(this.matchService.getPointTable(), HttpStatus.OK);
     }
+
+
+
 
 
 }
